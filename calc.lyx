@@ -1,0 +1,84 @@
+#LyX 1.6.7 created this file. For more info see http://www.lyx.org/
+\lyxformat 345
+\begin_document
+\begin_header
+\textclass article
+\use_default_options true
+\language ukrainian
+\inputencoding auto
+\font_roman default
+\font_sans default
+\font_typewriter default
+\font_default_family default
+\font_sc false
+\font_osf false
+\font_sf_scale 100
+\font_tt_scale 100
+
+\graphics default
+\paperfontsize default
+\use_hyperref false
+\papersize default
+\use_geometry false
+\use_amsmath 1
+\use_esint 1
+\cite_engine basic
+\use_bibtopic false
+\paperorientation portrait
+\secnumdepth 3
+\tocdepth 3
+\paragraph_separation indent
+\defskip medskip
+\quotes_language english
+\papercolumns 1
+\papersides 1
+\paperpagestyle default
+\tracking_changes false
+\output_changes false
+\author "" 
+\end_header
+
+\begin_body
+
+\begin_layout Standard
+\begin_inset Formula \[
+2P_{2}(x)=3xP_{1}(x)-P_{0}(x)\Rightarrow P_{2}(x)=\frac{1}{2}(3x^{2}-1)\]
+
+\end_inset
+
+
+\begin_inset Formula \[
+P_{0}(cos\theta)=1;\, P_{0}^{0}=1\]
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+\begin_inset Formula \[
+P_{1}(cos\theta)=\frac{1}{2}\frac{d}{d(cos\theta)}(cos^{2}\theta-1)=cos\theta\]
+
+\end_inset
+
+
+\begin_inset Formula \begin{eqnarray*}
+P_{1}^{0}(cos\theta) & = & \frac{1}{2}\frac{d}{d(cos\theta)}(cos^{2}\theta-1)=cos\theta\\
+P_{1}^{1}(cos\theta) & = & \frac{1}{2}\left[1-cos^{2}\theta\right]^{\frac{1}{2}}\frac{d^{2}}{(dcos\theta)^{2}}(cos^{2}\theta-1)=sin\theta\end{eqnarray*}
+
+\end_inset
+
+
+\begin_inset Formula \begin{eqnarray*}
+P_{2}(cos\theta) & = & \frac{1}{8}\frac{d^{2}}{d(cos\theta)^{2}}(cos^{2}\theta-1)^{2}=\frac{1}{2}(\frac{d}{d(cos\theta)}\left[(cos^{2}\theta-1)cos\theta\right])=\\
+= & \frac{1}{2}[2cos^{2}\theta & +(cos^{2}\theta-1)]=\frac{1}{2}(3cos^{2}\theta-1)\\
+P_{2}^{1} & = & \frac{1}{8}sin\theta\frac{d^{3}}{(dcos\theta)^{3}}(cos^{2}\theta-1)^{2}=\frac{1}{2}sin\theta\frac{d^{2}}{(dcos\theta)^{2}}\left[(cos^{2}\theta-1)cos\theta\right]=\\
+= & \frac{1}{2}sin\theta & \frac{d}{dcos\theta}\left[3cos^{2}\theta-1\right]=3sin\theta cos\theta\end{eqnarray*}
+
+\end_inset
+
+-1
+\end_layout
+
+\end_body
+\end_document
