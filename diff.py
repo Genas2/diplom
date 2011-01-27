@@ -7,5 +7,5 @@ def diff(func, x, l, prec=0.01):
 
 func = lambda x, l: math.pow((math.cos(x) * math.cos(x) - 1), l)
 
-print(diff(func, math.pi/2, 1))
+diff(func, math.pi / 2, 1)
 
