@@ -18,4 +18,6 @@ def legendre_calculate(n, x):
 
   return p[-1]
 
+def assoc_legendre_calculate(l, m):
+  return  
 #print(legendre_calculate(2,1))
