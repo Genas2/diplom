@@ -3,3 +3,4 @@ aL(n,k,r) := diff(L(n, r), r, k);
 R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, 
                                                                                                                                 (2*Z*r)/(a0*n));
 
+n:2$ l:1$ al:ratsimp(aL(n+l,2*l+1,t))$ t:(2*Z*r)/(a0*n)$ R(n,l,r); kill(t)$
