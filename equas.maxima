@@ -1,6 +1,35 @@
+
+# Legendre polinomials
+P(l,eta):=(1/(2^l * l!)) * diff((eta^2 - 1)^l, eta, l)$
+
+# generalized Legendre polinomials
+aP(l, m, eta):= (1 - (eta^2))^(abs(m)/2) * diff(P(l, eta), eta, abs(m))$
+
+# Angular part
+ETA_tmp(l, m, eta) := sqrt(((2*l + 1)/2) * (l - abs(m))!/(l + abs(m))!)$
+ETA(l,m,eta) := ETA_tmp(l,m,eta) * ev(ap);
+l:1$ m:1$ ap:ratsimp(aP(l, abs(m), t))$ t:cos(eta)$ ratsimp(ETA(l, m, eta)); kill(t)$
+
+# Temp
+ETA(l,m,eta):= ETA_tmp(l,m,eta) * aP(l,m,eta)$
+
+
+# Laguerre polynomials
 L(n,r) := exp(r) * diff(r^n * exp(-r), r, n)$
+
+# generalized Legendre polinomials
 aL(n,k,r) := diff(L(n, r), r, k)$
+
+# Radial part
+R_tmp(n,l,r) := -(((2 * Z)/(n * a0))^3 * (n - l - 1)!/(2 * n * ((n+l)!)^3)) ^ (1/2) * exp(-(Z * r)/(a0 * n))$
+R(n,l,r):= R_tmp(n,l,r) * ev(al)$
+n:2$ l:1$ al:ratsimp(aL(n+l,2*l+1,t))$ t:(2*Z*r)/(a0*n)$ R(n,l,r); kill(t)$
+
+
+
+########################################################################################################################################
+#Trash
 R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, t)$
 
 kill(t)$ Rez:R(2,0,r)$ t:(2*Z*r)/(a0*n)$ ratsimp(ev(Rez));
-n:2$ l:1$ al:ratsimp(aL(n+l,2*l+1,t))$ t:(2*Z*r)/(a0*n)$ R(n,l,r); kill(t)$
+
