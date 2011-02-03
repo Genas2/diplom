@@ -59,3 +59,8 @@ PSI(n,l,m,r,theta,phi) := R(n, l, r) * Y(l, m, theta, phi)$
 #R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, t)$
 #kill(t)$ Rez:R(2,0,r)$ t:(2*Z*r)/(a0*n)$ ratsimp(ev(Rez));
 */
+
+poi /* lkj 
+/* klj
+asdf */
+a*/ lkj

@@ -13,16 +13,21 @@ end_comment = 0
 
 for line in fd:
   
-  start_comment = start_comment + len(re.findall('/\*', line))
-  end_comment = end_comment + len(re.findall('\*/', line))
+  start_comment = len(re.findall('/\*', line))
+  end_comment = len(re.findall('\*/', line))
 
-  comment = start_comment - end_comment
+  comment = comment + start_comment - end_comment
 
   if comment < 0:
-      print("Comment syntax error in %s", MAXIMA_FILE)
+    print("Comment syntax error in " + MAXIMA_FILE)
+  elif start_comment and end_comment:
+    line = re.sub('/\*[^\*/]*\*/', '', line)
+  elif start_comment:
+    line = re.sub('/\*[^/\*]*', '', line)
   elif end_comment:
-      line = re.sub('/\*.*\*/', '', line)
-  elif comment == 0:
+    line = re.sub('[^\*/]*\*/', '', line)
+
+  if line:
     print(line)
 
 fd.close()
