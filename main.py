@@ -5,29 +5,39 @@ import re
 
 MAXIMA_FILE = 'equas.mac'
 
-fd = open(MAXIMA_FILE, 'r')
+def read_maxima_file(maxima_file):
 
-comment = 0
-start_comment = 0
-end_comment = 0
+  equations = {}
 
-for line in fd:
+  fd = open(maxima_file, 'r')
   
-  start_comment = len(re.findall('/\*', line))
-  end_comment = len(re.findall('\*/', line))
+  comment = 0
+  start_comment = 0
+  end_comment = 0
+  
+  for line in fd:
+    
+    start_comment = len(re.findall('/\*', line))
+    end_comment = len(re.findall('\*/', line))
+  
+    comment = comment + start_comment - end_comment
+  
+    if comment < 0:
+      print("Comment syntax error in " + maxima_file)
+    elif start_comment and end_comment:
+      line = re.sub('/\*[^\*/]*\*/', '', line)
+    elif start_comment:
+      line = re.sub('/\*[^/\*]*', '', line)
+    elif end_comment:
+      line = re.sub('[^\*/]*\*/', '', line)
+    elif comment != 0:
+      continue
+  
+    if line and line != '\n':
+      eq_name = line[0:line.find('(')] 
+      equations[eq_name] = line
 
-  comment = comment + start_comment - end_comment
+  fd.close()
+  return equations
 
-  if comment < 0:
-    print("Comment syntax error in " + MAXIMA_FILE)
-  elif start_comment and end_comment:
-    line = re.sub('/\*[^\*/]*\*/', '', line)
-  elif start_comment:
-    line = re.sub('/\*[^/\*]*', '', line)
-  elif end_comment:
-    line = re.sub('[^\*/]*\*/', '', line)
-
-  if line:
-    print(line)
-
-fd.close()
+print(read_maxima_file(MAXIMA_FILE))
