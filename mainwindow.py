@@ -1,12 +1,12 @@
-#!/usr/bin/python
-
 from PyQt4 import QtCore, QtGui
+from ui_mainwindow import *
 #from world import WorldArea
 
-class MainWindow(QtGui.QMainWindow):
+class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def __init__(self, parent = None):
         QtGui.QMainWindow.__init__(self, parent)
 
+        self.setupUi(self)
         self.saveAsActs = []
 
         #self.world = WorldArea()
