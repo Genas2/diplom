@@ -1,7 +1,18 @@
 #!/usr/bin/python2
 
+import sympy
+
+# Declaring variables
+x = sympy.Symbol('x')
+n = sympy.Symbol('n')
+l = sympy.Symbol('l')
+m = sympy.Symbol('m')
+r = sympy.Symbol('r')
+phi = sympy.Symbol('phi')
+theta = sympy.Symbol('theta')
+
 # PHI-equation for real numbers
-PHI = lambda m, phi: sympy.sqrt(1/(2 * sympy.pi)) * sympy.cos(m * phi) if m>=0 else sympy.sin(m * phi)
+PHI = lambda m, phi: sympy.sqrt(1/(2 * sympy.pi)) * (sympy.cos(m * phi) if m>=0 else sympy.sin(m * phi))
 
 # Legendre polinomials
 P = lambda n,x: (1/(2**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
@@ -9,12 +20,10 @@ P = lambda n,x: (1/(2**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n
 # generalized Legendre polinomials
 gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
 
-#/*
-# ETA-equation solution
-#*/
-#ETHA(l,m,etha) := sqrt(((2*l + 1)/2) * (l - abs(m))!/(l + abs(m))!) * at(aP(l,m,t), t=cos(etha))$
-#
-ETHA = lambda l,m,etha: sympy.sqrt(((2 * l + 1)/2) * sympy.factorial(l - sympy.abs(m))/sympy.factorial(l + sympy.abs(m))) * gP(l,m,etha).subs(etha, sympy.cos(etha))
+# THETA-equation solution
+THETA = lambda l,m,theta: sympy.sqrt(sympy.Rational((2 * l + 1),2.0) \
+                       * sympy.Rational(sympy.factorial(l - sympy.abs(m)),sympy.factorial(l + sympy.abs(m)))) \
+                       * gP(l,m,theta).subs(theta, sympy.cos(theta))
 
 #/*
 # Angular part
