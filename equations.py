@@ -12,7 +12,7 @@ phi = sympy.Symbol('phi')
 theta = sympy.Symbol('theta')
 
 # PHI-equation for real numbers
-PHI = lambda m, phi: sympy.sqrt(1/(2 * sympy.pi)) * (sympy.cos(m * phi) if m>=0 else sympy.sin(m * phi))
+PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
 # Legendre polinomials
 P = lambda n,x: (1/(2**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
@@ -30,6 +30,7 @@ THETA = lambda l,m,theta: sympy.sqrt(sympy.Rational((2 * l + 1),2.0) \
 #*/
 #Y(l,m,theta,phi) := THETA(l, m, theta) * PHI(m, phi)$
 #
+
 
 
 #/*
