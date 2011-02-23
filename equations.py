@@ -1,25 +1,26 @@
 #!/usr/bin/python2
 
 import sympy
+from sympy import Symbol
 
 # Declaring variables
-x = sympy.Symbol('x')
-n = sympy.Symbol('n')
-l = sympy.Symbol('l')
-m = sympy.Symbol('m')
-r = sympy.Symbol('r')
-phi = sympy.Symbol('phi')
-theta = sympy.Symbol('theta')
+x = Symbol('x')
+n = Symbol('n')
+l = Symbol('l')
+m = Symbol('m')
+r = Symbol('r')
+phi = Symbol('phi')
+theta = Symbol('theta')
 
 # PHI-equation for real numbers
 # PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
-def PHI (m=0, phi=sympy.Symbol('phi'), mode='numer'): 
+#TODO: determine mode by phi type
+def PHI (m=0, phi=Symbol('phi'), mode='numer'): 
     if mode == 'numer':
         lp = sympy.sqrt(1./(2. * sympy.pi)).evalf()
         rp = (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)).evalf()
     elif mode == 'analit':
-        print('asd')
         lp = 1/sympy.sqrt(2 * sympy.pi)
         rp = sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)
     else:
@@ -28,10 +29,24 @@ def PHI (m=0, phi=sympy.Symbol('phi'), mode='numer'):
     return lp * rp
     #return sympy.sqrt(1./(2. * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
-print(PHI(mode='analit'))
-
 # Legendre polinomials
-P = lambda n,x: (1./(2.**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
+#P = lambda n,x: (1./(2.**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
+
+def Legendre(n=0, x=Symbol('x')):
+    t = type(x).__name__  
+    if t == 'float' or t = 'int':
+        rat_part = 1./(2.**n * sympy.factorial(n)).evalf()
+        diff_part = sympy.diff((x**2 - 1)**n, x, n).evalf()
+    elif x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
+        rat_part = 1/(2**n * sympy.factorial(n))
+        diff_part = sympy.diff((x**2 - 1)**n, x, n)
+    else:
+        return False
+    
+    return (rat_part * diff_part).expand()
+
+for i in range(0,10):
+    print(Legendre(n=i, mode='analit').__str__() + ' | ' + sympy.legendre(i,x).__str__())
 
 # generalized Legendre polinomials
 gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
