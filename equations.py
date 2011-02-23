@@ -12,10 +12,26 @@ phi = sympy.Symbol('phi')
 theta = sympy.Symbol('theta')
 
 # PHI-equation for real numbers
-PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
+# PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
+
+def PHI (m=0, phi=sympy.Symbol('phi'), mode='numer'): 
+    if mode == 'numer':
+        lp = sympy.sqrt(1./(2. * sympy.pi)).evalf()
+        rp = (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)).evalf()
+    elif mode == 'analit':
+        print('asd')
+        lp = 1/sympy.sqrt(2 * sympy.pi)
+        rp = sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)
+    else:
+        return False
+
+    return lp * rp
+    #return sympy.sqrt(1./(2. * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
+
+print(PHI(mode='analit'))
 
 # Legendre polinomials
-P = lambda n,x: (1/(2**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
+P = lambda n,x: (1./(2.**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
 
 # generalized Legendre polinomials
 gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
