@@ -30,23 +30,28 @@ def PHI (m=0, phi=Symbol('phi'), mode='numer'):
     #return sympy.sqrt(1./(2. * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
 # Legendre polinomials
-#P = lambda n,x: (1./(2.**n * sympy.factorial(n))) * sympy.diff((x**2 - 1)**n, x, n)
 
 def Legendre(n=0, x=Symbol('x')):
     t = type(x).__name__  
-    if t == 'float' or t = 'int':
-        rat_part = 1./(2.**n * sympy.factorial(n)).evalf()
-        diff_part = sympy.diff((x**2 - 1)**n, x, n).evalf()
-    elif x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
+    numeric_mode = False
+
+    if t == 'float' or t == 'int':
+        numeric_mode = True
+        x_val = x
+        x = Symbol('x')
+    elif t == 'str':
+        x = Symbol(x)
+
+    if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
         rat_part = 1/(2**n * sympy.factorial(n))
         diff_part = sympy.diff((x**2 - 1)**n, x, n)
     else:
         return False
     
-    return (rat_part * diff_part).expand()
-
-for i in range(0,10):
-    print(Legendre(n=i, mode='analit').__str__() + ' | ' + sympy.legendre(i,x).__str__())
+    if numeric_mode:
+        return (rat_part.subs(x, x_val) * diff_part.subs(x, x_val)).evalf()
+    else:
+        return (rat_part * diff_part).expand()
 
 # generalized Legendre polinomials
 gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
