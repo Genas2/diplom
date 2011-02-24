@@ -42,10 +42,11 @@ def Legendre(n=0, x=Symbol('x')):
     elif t == 'str':
         x = Symbol(x)
 
-    if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
-        rat_part = 1/(2**n * sympy.factorial(n))
-        diff_part = sympy.diff((x**2 - 1)**n, x, n)
-    else:
+    try:
+        if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
+            rat_part = 1/(2**n * sympy.factorial(n))
+            diff_part = sympy.diff((x**2 - 1)**n, x, n)
+    except AttributeError:
         return False
     
     if numeric_mode:
@@ -54,7 +55,17 @@ def Legendre(n=0, x=Symbol('x')):
         return (rat_part * diff_part).expand()
 
 # generalized Legendre polinomials
-gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
+# gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
+def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
+    legendre_polinomial = Legendre(n=n, x=x)
+
+    if type(legendre_polinomial).__name__ != 'Boolean':
+        rat_part = (1 - (x**2))**(sympy.abs(m)/2)
+        diff_part = sympy.diff(legendre_polinomial, x, abs(m))
+
+        return (rat_part * diff_part).expand()
+    else:
+        return False
 
 # THETA-equation solution
 THETA = lambda l,m,theta: sympy.sqrt(sympy.Rational((2 * l + 1),2.0) \
