@@ -29,30 +29,38 @@ def PHI (m=0, phi=Symbol('phi'), mode='numer'):
     return lp * rp
     #return sympy.sqrt(1./(2. * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
+def select_exec_mode(x):
+    t = type(x).__name__
+
+    if t == 'float' or t == 'int':
+        return 'numer'
+
+    try:
+        if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
+            return 'analit'
+    except AttributeError:
+        return 'undef'
+
 # Legendre polinomials
 
 def Legendre(n=0, x=Symbol('x')):
     t = type(x).__name__  
-    numeric_mode = False
+    mode = select_exec_mode(x)
 
-    if t == 'float' or t == 'int':
-        numeric_mode = True
+    if mode == 'numer': 
         x_val = x
         x = Symbol('x')
-    elif t == 'str':
-        x = Symbol(x)
 
-    try:
-        if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
-            rat_part = 1/(2**n * sympy.factorial(n))
-            diff_part = sympy.diff((x**2 - 1)**n, x, n)
-    except AttributeError:
-        return False
+    if mode != 'undef':
+        rat_part = 1/(2**n * sympy.factorial(n))
+        diff_part = sympy.diff((x**2 - 1)**n, x, n)
     
-    if numeric_mode:
+    if mode == 'numer':
         return (rat_part.subs(x, x_val) * diff_part.subs(x, x_val)).evalf()
-    else:
+    elif mode == 'analit':
         return (rat_part * diff_part).expand()
+    else:
+        return -1
 
 # generalized Legendre polinomials
 # gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
