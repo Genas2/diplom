@@ -34,6 +34,8 @@ def select_exec_mode(x):
 
     if t == 'float' or t == 'int':
         return 'numer'
+    elif t == 'str':
+        return 'custom_var'
 
     try:
         if x.is_Symbol or x.is_Add or x.is_Mul or x.is_Function:
@@ -50,6 +52,8 @@ def Legendre(n=0, x=Symbol('x')):
     if mode == 'numer': 
         x_val = x
         x = Symbol('x')
+    elif mode == 'custom_var':
+        x = Symbol(x)
 
     if mode != 'undef':
         rat_part = 1/(2**n * sympy.factorial(n))
@@ -57,17 +61,18 @@ def Legendre(n=0, x=Symbol('x')):
     
     if mode == 'numer':
         return (rat_part.subs(x, x_val) * diff_part.subs(x, x_val)).evalf()
-    elif mode == 'analit':
+    elif mode == 'analit' or mode == 'custom_var':
         return (rat_part * diff_part).expand()
     else:
-        return -1
+        raise TypeError
 
 # generalized Legendre polinomials
 # gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
 def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
+    mode = select_exec_mode(x)
     legendre_polinomial = Legendre(n=n, x=x)
 
-    if type(legendre_polinomial).__name__ != 'Boolean':
+    if mode != 'undef':
         rat_part = (1 - (x**2))**(sympy.abs(m)/2)
         diff_part = sympy.diff(legendre_polinomial, x, abs(m))
 
