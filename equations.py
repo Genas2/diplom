@@ -1,7 +1,7 @@
 #!/usr/bin/python2
 
 import sympy
-from sympy import Symbol
+from sympy import Symbol, factorial, Rational
 
 # Declaring variables
 x = Symbol('x')
@@ -81,9 +81,30 @@ def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
         return False
 
 # THETA-equation solution
-THETA = lambda l,m,theta: sympy.sqrt(sympy.Rational((2 * l + 1),2.0) \
-                       * sympy.Rational(sympy.factorial(l - sympy.abs(m)),sympy.factorial(l + sympy.abs(m)))) \
-                       * gP(l,m,theta).subs(theta, sympy.cos(theta))
+# THETA = lambda l,m,theta: sympy.sqrt(sympy.Rational((2 * l + 1),2.0) \
+#                             * sympy.Rational(sympy.factorial(l - sympy.abs(m)),sympy.factorial(l + sympy.abs(m)))) \
+#                        * gP(l,m,theta).subs(theta, sympy.cos(theta))
+
+def Theta_Equation(l, m, theta):
+    ''' l - orbital quantum number
+        m - magnetic quantum number '''
+    
+    # Prevents integer division and float l,m
+    l = int(l)
+    m = float(int(m))
+
+    mode = select_exec_mode(theta)
+
+    gL = Generalized_Legendre(l, m, theta).subs(theta, sympy.cos(theta))
+    
+    if gL:
+        rat_part = sympy.sqrt(Rational((2 * l + 1),2) * Rational(factorial(l - sympy.abs(m)),factorial(l + sympy.abs(m))))
+        if mode == 'numer':
+            return (rat_part * gL).evalf()
+        elif mode == 'analit':
+            return (rat_part * gL).expand()
+
+    return False
 
 #/*
 # Angular part
