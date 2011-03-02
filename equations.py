@@ -12,23 +12,6 @@ r = Symbol('r')
 phi = Symbol('phi')
 theta = Symbol('theta')
 
-# PHI-equation for real numbers
-# PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
-
-#TODO: determine mode by phi type
-def PHI (m=0, phi=Symbol('phi'), mode='numer'): 
-    if mode == 'numer':
-        lp = sympy.sqrt(1./(2. * sympy.pi)).evalf()
-        rp = (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)).evalf()
-    elif mode == 'analit':
-        lp = 1/sympy.sqrt(2 * sympy.pi)
-        rp = sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)
-    else:
-        return False
-
-    return lp * rp
-    #return sympy.sqrt(1./(2. * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
-
 def select_exec_mode(x):
     t = type(x).__name__
 
@@ -42,6 +25,30 @@ def select_exec_mode(x):
             return 'analit'
     except AttributeError:
         return 'undef'
+
+# PHI-equation for real numbers
+# PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
+
+#TODO: determine mode by phi type
+def Phi_Equation (m=0, phi=Symbol('phi')): 
+    m = float(int(m))
+    mode = select_exec_mode(phi)
+
+    if mode == 'numer': 
+        phi_val = phi
+        phi = Symbol('phi')
+    elif mode == 'custom_var':
+        phi = Symbol(phi)
+    elif mode == 'undef':
+        return False
+
+    left_part  = 1/sympy.sqrt(2 * sympy.pi)
+    right_part = sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi)
+
+    if mode == 'numer':
+        return (left_part * right_part).evalf()
+    elif mode == 'analit' or mode == 'custom_var':
+        return (left_part * right_part).expand()
 
 # Legendre polinomials
 
@@ -70,9 +77,9 @@ def Legendre(n=0, x=Symbol('x')):
 # gP = lambda n,m,x: (1 - (x**2))**(sympy.abs(m)/2) * sympy.diff(P(n,x), x, abs(m))
 def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
     mode = select_exec_mode(x)
-    legendre_polinomial = Legendre(n=n, x=x)
 
     if mode != 'undef':
+        legendre_polinomial = Legendre(n=n, x=x)
         rat_part = (1 - (x**2))**(sympy.abs(m)/2)
         diff_part = sympy.diff(legendre_polinomial, x, abs(m))
 
@@ -112,6 +119,13 @@ def Theta_Equation(l, m, theta):
 #Y(l,m,theta,phi) := THETA(l, m, theta) * PHI(m, phi)$
 #
 
+def Angular_Part(l, m, theta, phi):
+    ''' Executes Angular part of Shregenger equation in spherical coordinates '''
+
+    THETA = Theta_Equation(l, m, theta)
+    PHI = Phi_Equation(m, phi)
+
+    return THETA * PHI
 
 
 #/*
