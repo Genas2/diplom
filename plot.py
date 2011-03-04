@@ -4,6 +4,9 @@
 
 import os
 import subprocess
+
+import sympy
+
 #import equations
 
 gp_settings = '''set ticslevel 0
@@ -20,7 +23,29 @@ set zlabel "z"
 set datafile missing "NaN"
 splot "-" title "Function" with pm3d
 '''
-gp_input = open('test.gnuplot', 'r').read()
+def plot3d(func, var1_range, var2_range, scale_x=10, scale_y=10):
+    var1 = sympy.Symbol(var1_range[0])
+    var2 = sympy.Symbol(var2_range[0])
+
+    step_x = (var1_range[-1] - var1_range[1])/scale_x
+    step_y = (var2_range[-1] - var2_range[1])/scale_y
+
+    output = ''
+    for i in range(scale_x):
+        var1_val = float(i*step_x)
+        for j in range(scale_y):
+            var2_val = float(j*step_y)
+            output += str(var1_val) + ' ' + str(var2_val) + ' ' + str(func.subs(var2, var2_val).subs(var1, var1_val)) + '\n'
+        output += '\n'
+    
+    return output
+
+x = sympy.Symbol('x')
+y = sympy.Symbol('y')
+
+#gp_input = open('test.gnuplot', 'r').read()
+gp_input = plot3d(x*y, ['x',0,10], ['y',0,10], 5, 5)
+
 gp_filename = 'temp.gnuplot'
 gp_fd = open(gp_filename, 'w')
 gp_fd.write(gp_settings)
