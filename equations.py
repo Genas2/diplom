@@ -27,9 +27,7 @@ def select_exec_mode(x):
         return 'undef'
 
 # PHI-equation for real numbers
-# PHI = lambda m, phi: sympy.sqrt(1.0/(2 * sympy.pi)) * (sympy.cos(sympy.abs(m) * phi) if m>=0 else sympy.sin(sympy.abs(m) * phi))
 
-#TODO: determine mode by phi type
 def Phi_Equation (m=0, phi=Symbol('phi')): 
     m = float(int(m))
     mode = select_exec_mode(phi)
@@ -134,12 +132,14 @@ def Angular_Part(l, m, theta, phi):
 #/*
 #plot3d(Y(0,0,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))])$
 #
+#Plot(sqrt(6)/(2*sqrt(4*pi)) * cos(phi) * sin(theta)**2, [phi,0,2*pi,35], [theta,-pi,pi,35], 'mode=spherical; color=zfade4')
+#Plot((1/(4*sqrt(2*pi))) * exp(-Z * sqrt(x**2)) * x * (Z/0.5)**(3.0/2.0) * , [x,-2,2])
 
 
 ## Generalized
 #plot3d(Y(2,1,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))], [grid, 50, 50], [plot_format, gnuplot])$
 #*/
-#
+
 
 
 #/*

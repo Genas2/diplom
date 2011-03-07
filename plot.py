@@ -30,22 +30,28 @@ def plot3d(func, var1_range, var2_range, mode='cartesian', scale_x=10, scale_y=1
     var1 = sympy.Symbol(var1_range[0])
     var2 = sympy.Symbol(var2_range[0])
 
-    if mode == 'cartesian':
-        step_x = (var1_range[-1] - var1_range[1])/scale_x
-        step_y = (var2_range[-1] - var2_range[1])/scale_y
-    elif mode == 'spherical':
-        step_x = ((sympy.sin(var1_range[-1])*sympy.cos(var2_range[-1]) 
-                   - sympy.sin(var1_range[1])*sympy.cos(var2_range[1])) / scale_x)
-        step_y = ((sympy.sin(var1_range[-1])*sympy.sin(var2_range[-1]) 
-                   - sympy.sin(var1_range[1])*sympy.sin(var2_range[1])) / scale_y)
+    #scale_x = float(scale_x)
+    #scale_y = float(scale_y)
+
+    #if mode == 'cartesian':
+    step_x = (var1_range[-1] - var1_range[1])/scale_x
+    step_y = (var2_range[-1] - var2_range[1])/scale_y
+    #elif mode == 'spherical':
+    #    step_x = ((sympy.sin(var1_range[-1])*sympy.cos(var2_range[-1]) 
+    #               - sympy.sin(var1_range[1])*sympy.cos(var2_range[1])) / scale_x)
+    #    step_y = ((sympy.sin(var1_range[-1])*sympy.sin(var2_range[-1]) 
+    #               - sympy.sin(var1_range[1])*sympy.sin(var2_range[1])) / scale_y)
 
     output = ''
     for i in range(scale_x):
         var1_val = float(i*step_x)
         for j in range(scale_y):
             var2_val = float(j*step_y)
+            x_val = (sympy.sin(var1_val) * sympy.sin(var2_val)).evalf()
+            y_val = (sympy.sin(var1_val) * sympy.cos(var2_val)).evalf()
+            z_val = (func.subs(var2, var2_val).subs(var1, var1_val) * sympy.cos(var2_val)).evalf()
             try:
-                output += str(var1_val) + ' ' + str(var2_val) + ' ' + str(func.subs(var2, var2_val).subs(var1, var1_val)) + '\n'
+                output += str(var1_val) + ' ' + str(var2_val) + ' ' + str(z_val) + '\n'
             except AttributeError:
                 return 'undef'
         output += '\n'
@@ -56,7 +62,8 @@ x = sympy.Symbol('x')
 y = sympy.Symbol('y')
 
 #gp_input = open('test.gnuplot', 'r').read()
-gp_input = plot3d(1, ['x',0,10], ['y',0,10], 'spherical', 5, 5)
+gp_input = plot3d(1, ['theta', 0, sympy.pi], ['phi', 0, 2*sympy.pi], 'spherical', 5, 5)
+print gp_input
 
 if gp_input != 'undef':
     gp_filename = 'temp.gnuplot'
