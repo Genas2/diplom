@@ -6,8 +6,12 @@ from mainwindow import MainWindow
 
 ui_file = 'mainwindow.ui'
 
+# Compiled to python ui file
+uic_file = 'ui_mainwindow.py'
+uic_fd = open('ui_mainwindow.py', 'w')
+
 try:
-    uic.compileUi(open(ui_file), open('ui_mainwindow.py', 'w'))
+    uic.compileUi(open(ui_file), uic_fd)
 except IOError:
     print(sys.argv[0] + ": " + ui_file + ' ' + os.strerror(errno.ENOENT))
     exit(errno.ENOENT)
