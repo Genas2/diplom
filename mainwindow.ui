@@ -23,7 +23,7 @@
          <widget class="QLabel" name="lbl_n">
           <property name="font">
            <font>
-            <family>CMU Serif [unknown]</family>
+            <family>Courier New</family>
             <italic>true</italic>
            </font>
           </property>
@@ -36,7 +36,11 @@
          </widget>
         </item>
         <item>
-         <widget class="QSpinBox" name="spin_n"/>
+         <widget class="QSpinBox" name="spin_n">
+          <property name="minimum">
+           <number>1</number>
+          </property>
+         </widget>
         </item>
        </layout>
       </item>
@@ -46,7 +50,7 @@
          <widget class="QLabel" name="lbl_l">
           <property name="font">
            <font>
-            <family>CMU Serif</family>
+            <family>Courier New</family>
             <pointsize>11</pointsize>
             <italic>true</italic>
            </font>
@@ -70,7 +74,7 @@
          <widget class="QLabel" name="lbl_m">
           <property name="font">
            <font>
-            <family>CMU Serif [unknown]</family>
+            <family>Courier New</family>
             <pointsize>11</pointsize>
             <italic>true</italic>
            </font>
@@ -93,7 +97,7 @@
     <item>
      <layout class="QVBoxLayout" name="verticalLayout_12">
       <item>
-       <widget class="QComboBox" name="comboBox">
+       <widget class="QComboBox" name="cmbSysCoord">
         <item>
          <property name="text">
           <string>cartesian</string>
@@ -112,7 +116,7 @@
          <widget class="QLabel" name="lbl_x_r_2">
           <property name="font">
            <font>
-            <family>CMU Serif [unknown]</family>
+            <family>Courier New</family>
             <italic>true</italic>
            </font>
           </property>
@@ -132,7 +136,7 @@
              <widget class="QLabel" name="lblMin_x_r">
               <property name="font">
                <font>
-                <family>CMU Serif [unknown]</family>
+                <family>Courier New</family>
                 <italic>true</italic>
                </font>
               </property>
@@ -145,7 +149,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMin_x_r"/>
+             <widget class="QDoubleSpinBox" name="spinMin_x_r">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>-1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -155,7 +166,7 @@
              <widget class="QLabel" name="lblMin_y_theta">
               <property name="font">
                <font>
-                <family>CMU Serif</family>
+                <family>Courier New</family>
                 <pointsize>11</pointsize>
                 <italic>true</italic>
                </font>
@@ -169,17 +180,24 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMin_y_theta"/>
+             <widget class="QDoubleSpinBox" name="spinMin_y_theta">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>-1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_6">
             <item>
-             <widget class="QLabel" name="lblMin_x_phi">
+             <widget class="QLabel" name="lblMin_z_phi">
               <property name="font">
                <font>
-                <family>CMU Serif [unknown]</family>
+                <family>Courier New</family>
                 <pointsize>11</pointsize>
                 <italic>true</italic>
                </font>
@@ -193,7 +211,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMin_z_phi"/>
+             <widget class="QDoubleSpinBox" name="spinMin_z_phi">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>-1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -207,7 +232,7 @@
          <widget class="QLabel" name="lbl_x_r_3">
           <property name="font">
            <font>
-            <family>CMU Serif [unknown]</family>
+            <family>Courier New</family>
             <italic>true</italic>
            </font>
           </property>
@@ -227,7 +252,7 @@
              <widget class="QLabel" name="lblMax_x_r">
               <property name="font">
                <font>
-                <family>CMU Serif [unknown]</family>
+                <family>Courier New</family>
                 <italic>true</italic>
                </font>
               </property>
@@ -240,7 +265,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMax_x_r"/>
+             <widget class="QDoubleSpinBox" name="spinMax_x_r">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -250,7 +282,7 @@
              <widget class="QLabel" name="lblMax_y_theta">
               <property name="font">
                <font>
-                <family>CMU Serif</family>
+                <family>Courier New</family>
                 <pointsize>11</pointsize>
                 <italic>true</italic>
                </font>
@@ -264,17 +296,24 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMax_y_theta"/>
+             <widget class="QDoubleSpinBox" name="spinMax_y_theta">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
           <item>
            <layout class="QVBoxLayout" name="verticalLayout_11">
             <item>
-             <widget class="QLabel" name="lblMax_x_phi">
+             <widget class="QLabel" name="lblMax_z_phi">
               <property name="font">
                <font>
-                <family>CMU Serif [unknown]</family>
+                <family>Courier New</family>
                 <pointsize>11</pointsize>
                 <italic>true</italic>
                </font>
@@ -288,7 +327,14 @@
              </widget>
             </item>
             <item>
-             <widget class="QDoubleSpinBox" name="spinMax_z_phi"/>
+             <widget class="QDoubleSpinBox" name="spinMax_z_phi">
+              <property name="minimum">
+               <double>-99.989999999999995</double>
+              </property>
+              <property name="value">
+               <double>1.000000000000000</double>
+              </property>
+             </widget>
             </item>
            </layout>
           </item>
@@ -331,5 +377,22 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>btnExit</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>182</x>
+     <y>281</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>55</x>
+     <y>280</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

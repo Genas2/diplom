@@ -1,23 +1,137 @@
-from PyQt4 import QtCore, QtGui
+# -*- coding: utf-8 -*-
+
+from PyQt4 import QtGui
+from PyQt4 import QtCore
+from PyQt4.QtCore import SIGNAL, SLOT
 from ui_mainwindow import *
 #from world import WorldArea
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
+
+    # Coordinate system mode
+    mode = 'cartesian'
+    mode = 'spherical'
+
+    # Quantum numbers
+    n = 1
+    l = 0
+    m = 0
+
+    # Cartesian limits and values
+    # Lower
+    min_x_value = -1
+    min_y_value = -1
+    min_z_value = -1
+    lower_x_limit = -100
+    lower_y_limit = -100
+    lower_z_limit = -100
+    # Upper
+    max_x_value = 1
+    max_y_value = 1
+    max_z_value = 1
+    lower_x_limit = 1
+    lower_y_limit = 1
+    lower_z_limit = 1
+
+    #Spherical limits and values
+    min_r = 0
+
     def __init__(self, parent = None):
         QtGui.QMainWindow.__init__(self, parent)
 
         self.setupUi(self)
         self.saveAsActs = []
 
-        #self.world = WorldArea()
-        #self.setCentralWidget(self.world)
-
         self.createActions()
         self.createMenus()
 
-        self.setWindowTitle(self.tr("Life"))
-        self.resize(500, 500)
+        self.setWindowTitle(self.tr("Molecula"))
 
+        self.connect(self.spin_n, SIGNAL('valueChanged(int)'),
+                      self, SLOT('set_n(int)'))
+        self.connect(self.spin_l, SIGNAL('valueChanged(int)'),
+                      self, SLOT('set_l(int)'))
+        self.connect(self.spin_m, SIGNAL('valueChanged(int)'),
+                      self, SLOT('set_m(int)'))
+
+
+        self.connect(self.spinMin_x_r, SIGNAL('valueChanged(int)'),
+                      self, SLOT('changedMinimum_x_r(int)'))
+        self.connect(self.spinMin_y_theta, SIGNAL('valueChanged(int)'),
+                      self, SLOT('changedMinimum_y_theta(int)'))
+        self.connect(self.spinMin_z_phi, SIGNAL('valueChanged(int)'),
+                      self, SLOT('changedMinimum_z_phi(int)'))
+
+        self.connect(self.cmbSysCoord, SIGNAL('currentIndexChanged(const QString)'), 
+                      self, SLOT('toggleMode(const QString)'))
+
+        mode_id = self.cmbSysCoord.findText(self.mode)
+        if mode_id > 0:
+            self.cmbSysCoord.setCurrentIndex(mode_id)
+            self.cmbSysCoord.emit(SIGNAL('currentIndexChanged(const QString)'), self.mode)
+
+        self.spin_n.setValue(self.n)
+        self.spin_n.emit(SIGNAL('valueChanged(int)'), self.n)
+
+    @QtCore.pyqtSlot('int')
+    def set_n(self, new_value):
+        self.n = new_value
+        if new_value <= self.l:
+            self.l = new_value - 1
+        self.spin_l.setMaximum(new_value - 1)
+        self.spin_m.setMaximum(self.l)
+        self.spin_m.setMinimum(-self.l)
+
+    @QtCore.pyqtSlot('int')
+    def set_l(self, new_value):
+        self.l = new_value
+        self.spin_m.setMaximum(self.l)
+        self.spin_m.setMinimum(-self.l)
+
+    @QtCore.pyqtSlot('int')
+    def set_m(self, new_value):
+        self.m = new_value
+
+    @QtCore.pyqtSlot('int')
+    def changedMinimum_x_r(self, new_value):
+        self.spinMax_x_r.setMinimum(new_value)
+
+    @QtCore.pyqtSlot('int')
+    def changedMinimum_y_theta(self, new_value):
+        self.spinMax_y_theta.setMinimum(new_value)
+
+    @QtCore.pyqtSlot('int')
+    def changedMinimum_z_phi(self, new_value):
+        self.spinMax_z_phi.setMinimum(new_value)
+
+    @QtCore.pyqtSlot('QString')
+    def toggleMode(self, mode):
+        if mode == self.mode:
+            return 0
+        else:
+            self.mode = mode
+
+        if mode == 'cartesian':
+            self.lblMin_x_r.setText('x')
+            self.lblMin_x_r.setMinimum(self.min_x)
+            self.lblMin_y_theta.setText('y')
+            self.lblMin_z_phi.setText('z')
+            self.lblMax_x_r.setText('x')
+            self.lblMax_y_theta.setText('y')
+            self.lblMax_z_phi.setText('z')
+        elif mode == 'spherical':
+            self.lblMin_x_r.setText('r')
+            self.lblMin_x_r.setMinimum(self.min_r)
+
+            self.lblMin_y_theta.setText(u'θ')
+            self.lblMin_z_phi.setText(u'φ')
+
+            self.lblMax_x_r.setText('r')
+            self.lblMax_x_r.setMinimum(self.min_r)
+
+            self.lblMax_y_theta.setText(u'θ')
+            self.lblMax_z_phi.setText(u'φ')
+            
     def closeEvent(self, event):
         #if self.maybeSave():
         #    event.accept()
