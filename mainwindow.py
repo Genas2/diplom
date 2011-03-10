@@ -4,37 +4,62 @@ from PyQt4 import QtGui
 from PyQt4 import QtCore
 from PyQt4.QtCore import SIGNAL, SLOT
 from ui_mainwindow import *
-#from world import WorldArea
+
+import sympy
+import equations
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     # Coordinate system mode
     mode = 'cartesian'
-    mode = 'spherical'
 
     # Quantum numbers
     n = 1
     l = 0
     m = 0
 
-    # Cartesian limits and values
-    # Lower
-    min_x_value = -1
-    min_y_value = -1
-    min_z_value = -1
-    lower_x_limit = -100
-    lower_y_limit = -100
-    lower_z_limit = -100
-    # Upper
-    max_x_value = 1
-    max_y_value = 1
-    max_z_value = 1
-    lower_x_limit = 1
-    lower_y_limit = 1
-    lower_z_limit = 1
+    # Cartesian values limits
+    min_x = -1
+    max_x = 1
 
-    #Spherical limits and values
+    min_y = -1
+    max_y = 1
+
+    min_z = -1
+    max_z = 1
+
+    # Cartesian spin limits
+    lower_x_limit = -100
+    upper_x_limit = 100
+
+    lower_y_limit = -100
+    upper_y_limit = 100
+
+    lower_z_limit = -100
+    upper_z_limit = 100
+
+    # Spherical values limits
     min_r = 0
+    max_r = 1
+
+    min_theta = -sympy.pi
+    max_theta = sympy.pi
+
+    min_phi = -2 * sympy.pi
+    max_phi = 2 * sympy.pi
+
+    # Spherical spin limits
+    lower_r_limit = 0
+    upper_r_limit = 100
+
+    lower_theta_limit = -2 * sympy.pi
+    upper_theta_limit = 2 * sympy.pi
+
+    lower_phi_limit = -2 * sympy.pi
+    upper_phi_limit = 2 * sympy.pi
+
+    # 
+    plot = ''
 
     def __init__(self, parent = None):
         QtGui.QMainWindow.__init__(self, parent)
@@ -54,16 +79,24 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         self.connect(self.spin_m, SIGNAL('valueChanged(int)'),
                       self, SLOT('set_m(int)'))
 
+        self.connect(self.spinMin_x_r, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMinimum_x_r(double)'))
+        self.connect(self.spinMin_y_theta, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMinimum_y_theta(double)'))
+        self.connect(self.spinMin_z_phi, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMinimum_z_phi(double)'))
 
-        self.connect(self.spinMin_x_r, SIGNAL('valueChanged(int)'),
-                      self, SLOT('changedMinimum_x_r(int)'))
-        self.connect(self.spinMin_y_theta, SIGNAL('valueChanged(int)'),
-                      self, SLOT('changedMinimum_y_theta(int)'))
-        self.connect(self.spinMin_z_phi, SIGNAL('valueChanged(int)'),
-                      self, SLOT('changedMinimum_z_phi(int)'))
+        self.connect(self.spinMax_x_r, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMaximum_x_r(double)'))
+        self.connect(self.spinMax_y_theta, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMaximum_y_theta(double)'))
+        self.connect(self.spinMax_z_phi, SIGNAL('valueChanged(double)'),
+                      self, SLOT('changedMaximum_z_phi(double)'))
 
         self.connect(self.cmbSysCoord, SIGNAL('currentIndexChanged(const QString)'), 
                       self, SLOT('toggleMode(const QString)'))
+        self.connect(self.btnBuildPlot, SIGNAL('clicked()'),
+                      self, SLOT('buildPlot()'))
 
         mode_id = self.cmbSysCoord.findText(self.mode)
         if mode_id > 0:
@@ -92,17 +125,38 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def set_m(self, new_value):
         self.m = new_value
 
-    @QtCore.pyqtSlot('int')
+    @QtCore.pyqtSlot('double')
     def changedMinimum_x_r(self, new_value):
         self.spinMax_x_r.setMinimum(new_value)
 
-    @QtCore.pyqtSlot('int')
+    @QtCore.pyqtSlot('double')
     def changedMinimum_y_theta(self, new_value):
         self.spinMax_y_theta.setMinimum(new_value)
 
-    @QtCore.pyqtSlot('int')
+    @QtCore.pyqtSlot('double')
     def changedMinimum_z_phi(self, new_value):
         self.spinMax_z_phi.setMinimum(new_value)
+
+    @QtCore.pyqtSlot('double')
+    def changedMaximum_x_r(self, new_value):
+        self.spinMin_x_r.setMaximum(new_value)
+
+    @QtCore.pyqtSlot('double')
+    def changedMaximum_y_theta(self, new_value):
+        self.spinMin_y_theta.setMaximum(new_value)
+
+    @QtCore.pyqtSlot('double')
+    def changedMaximum_z_phi(self, new_value):
+        self.spinMin_z_phi.setMaximum(new_value)
+
+    @QtCore.pyqtSlot()
+    def buildPlot(self):
+        if type(self.plot).__name__ == 'Plot':
+            self.plot.clear()
+
+        self.plot = sympy.Plot()
+        self.plot[1] = equations.Angular_Part(self.l, self.m, equations.theta, equations.phi) 
+        return True
 
     @QtCore.pyqtSlot('QString')
     def toggleMode(self, mode):
@@ -112,25 +166,60 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.mode = mode
 
         if mode == 'cartesian':
+            # Change coordinates labels
             self.lblMin_x_r.setText('x')
-            self.lblMin_x_r.setMinimum(self.min_x)
             self.lblMin_y_theta.setText('y')
             self.lblMin_z_phi.setText('z')
+
             self.lblMax_x_r.setText('x')
             self.lblMax_y_theta.setText('y')
             self.lblMax_z_phi.setText('z')
-        elif mode == 'spherical':
-            self.lblMin_x_r.setText('r')
-            self.lblMin_x_r.setMinimum(self.min_r)
 
+            # Change spin limits
+            self.spinMin_x_r.setMinimum(self.lower_x_limit)
+            self.spinMin_y_theta.setMinimum(self.lower_y_limit)
+            self.spinMin_z_phi.setMinimum(self.lower_z_limit)
+
+            self.spinMax_x_r.setMaximum(self.upper_x_limit)
+            self.spinMax_y_theta.setMaximum(self.upper_y_limit)
+            self.spinMax_z_phi.setMaximum(self.upper_z_limit)
+            
+            # Change values
+            self.spinMin_x_r.setValue(self.min_x)
+            self.spinMin_y_theta.setValue(self.min_y)
+            self.spinMin_z_phi.setValue(self.min_z)
+
+            self.spinMax_x_r.setValue(self.max_x)
+            self.spinMax_y_theta.setValue(self.max_y)
+            self.spinMax_z_phi.setValue(self.max_z)
+
+        elif mode == 'spherical':
+            # Change coordinates labels
+            self.lblMin_x_r.setText('r')
             self.lblMin_y_theta.setText(u'θ')
             self.lblMin_z_phi.setText(u'φ')
 
             self.lblMax_x_r.setText('r')
-            self.lblMax_x_r.setMinimum(self.min_r)
-
             self.lblMax_y_theta.setText(u'θ')
             self.lblMax_z_phi.setText(u'φ')
+
+            # Change spin limits
+            self.spinMin_x_r.setMinimum(self.lower_r_limit)
+            self.spinMin_y_theta.setMinimum(self.lower_theta_limit)
+            self.spinMin_z_phi.setMinimum(self.lower_phi_limit)
+
+            self.spinMax_x_r.setMaximum(self.upper_r_limit)
+            self.spinMax_y_theta.setMaximum(self.upper_theta_limit)
+            self.spinMax_z_phi.setMaximum(self.upper_phi_limit)
+            
+            # Change values
+            self.spinMin_x_r.setValue(self.min_r)
+            self.spinMin_y_theta.setValue(self.min_theta)
+            self.spinMin_z_phi.setValue(self.min_phi)
+
+            self.spinMax_x_r.setValue(self.max_r)
+            self.spinMax_y_theta.setValue(self.max_theta)
+            self.spinMax_z_phi.setValue(self.max_phi)
             
     def closeEvent(self, event):
         #if self.maybeSave():
