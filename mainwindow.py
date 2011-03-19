@@ -155,7 +155,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.plot.clear()
 
         self.plot = sympy.Plot()
-        self.plot[1] = equations.Angular_Part(self.l, self.m, equations.theta, equations.phi) 
+        self.plot[1] = (equations.Angular_Part(self.l, self.m, equations.theta, equations.phi),
+                        'mode=spherical')
         return True
 
     @QtCore.pyqtSlot('QString')

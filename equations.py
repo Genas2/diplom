@@ -79,6 +79,7 @@ def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
     if mode != 'undef':
         legendre_polinomial = Legendre(n=n, x=x)
         rat_part = (1 - (x**2))**(sympy.abs(m)/2)
+        m=int(m)
         diff_part = sympy.diff(legendre_polinomial, x, abs(m))
 
         return (rat_part * diff_part).expand()
@@ -126,6 +127,7 @@ def Angular_Part(l, m, theta, phi):
     return THETA * PHI
 
 
+print(Angular_Part(1,1,theta,phi))
 #/*
 # Angular part plot
 #*/
