@@ -11,6 +11,8 @@ m = Symbol('m')
 r = Symbol('r')
 phi = Symbol('phi')
 theta = Symbol('theta')
+Z = Symbol('Z')
+a0 = Symbol('a0')
 
 def select_exec_mode(x):
     t = type(x).__name__
@@ -78,7 +80,7 @@ def Generalized_Legendre(n=0, m=0, x=Symbol('x')):
 
     if mode != 'undef':
         legendre_polinomial = Legendre(n=n, x=x)
-        rat_part = (1 - (x**2))**(sympy.abs(m)/2)
+        rat_part = (1 - (x**2))**(sympy.abs(m)/2.0)
         diff_part = sympy.diff(legendre_polinomial, x, abs(m))
 
         return (rat_part * diff_part).expand()
@@ -96,7 +98,7 @@ def Theta_Equation(l, m, theta):
     
     # Prevents integer division and float l,m
     l = int(l)
-    m = float(int(m))
+    m = int(m)
 
     mode = select_exec_mode(theta)
 
@@ -146,23 +148,28 @@ def Angular_Part(l, m, theta, phi):
 # Laguerre polynomials
 #*/
 #L(n,r) := exp(r) * diff(r^n * exp(-r), r, n)$
-#
-
+def Laguerre(n=1, r=Symbol('r')):
+    return sympy.radsimp(sympy.exp(r) * sympy.diff(r**n * sympy.exp(-r), r, n))
 
 #/*
 # generalized Legendre polinomials
 #*/
 #aL(n,k,r) := diff(L(n, r), r, k)$
-#
-
+def Generalized_Laguerre(n=1, k=0, r=Symbol('r')):
+    return sympy.diff(Laguerre(n, r), r, k)
 
 #/*
 # Radial part
 #*/
 #R(n,l,r) := -(((2 * Z)/(n * a0))^3 * (n - l - 1)!/(2 * n * ((n+l)!)^3)) ^ (1/2) * exp(-(Z * r)/(a0 * n)) * at(aL(n+l, 2*l+1, t), t=(2*Z*r)/(a0*n))$
-#
+def Radial_Part(n=1, l=0, r=Symbol('r')):
+    laguerre_part = Generalized_Laguerre(n + l, 2*l + 1, r).subs(r, (2.0*Z*r)/(a0*n))
+    left_part = -(((2.0 * Z)/(n * a0))**3 * Rational(factorial(n - l -1), 2*n * factorial(n+l)**3))**Rational(1,2) 
+    exp_part = sympy.exp(-(Z * r)/(a0 * n))
 
+    return left_part * exp_part * laguerre_part
 
+sympy.preview(Radial_Part())
 #/*
 # wavefunction
 #*/
