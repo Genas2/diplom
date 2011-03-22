@@ -153,10 +153,18 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     def buildPlot(self):
         if type(self.plot).__name__ == 'Plot':
             self.plot.clear()
+        else:
+            self.plot = sympy.Plot()
+        equation = equations.Angular_Part(self.l, self.m, equations.theta, equations.phi)
+        if self.mode == 'cartesian':
+            self.plot[1] = (equations.Angular_Part(self.l, self.m, equations.theta, equations.phi),
+                            'mode=cartesian')
+        elif self.mode == 'spherical':
+            self.plot[1] = (sympy.trigsimp(equation.subs(sympy.sin(equations.theta),sympy.sin(equations.theta)**2)),
+                            [equations.phi, self.min_phi, self.max_phi, 35], [equations.theta, self.min_theta, self.max_theta, 35],
+                            'mode=spherical')
 
-        self.plot = sympy.Plot()
-        self.plot[1] = (equations.Angular_Part(self.l, self.m, equations.theta, equations.phi),
-                        'mode=spherical')
+        self.plot.show()
         return True
 
     @QtCore.pyqtSlot('QString')
