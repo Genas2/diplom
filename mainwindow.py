@@ -6,17 +6,14 @@ from PyQt4.QtCore import SIGNAL, SLOT
 from ui_mainwindow import *
 
 import sympy
-import equations
+from equations import Equations
 
 class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     # Coordinate system mode
     mode = 'cartesian'
 
-    # Quantum numbers
-    n = 1
-    l = 0
-    m = 0
+    equations = Equations()
 
     # Cartesian values limits
     min_x = -1
@@ -95,35 +92,41 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.connect(self.cmbSysCoord, SIGNAL('currentIndexChanged(const QString)'), 
                       self, SLOT('toggleMode(const QString)'))
+        self.connect(self.cmbEquations, SIGNAL('currentIndexChanged(const QString)'), 
+                      self, SLOT('setEquation(const QString)'))
+
         self.connect(self.btnBuildPlot, SIGNAL('clicked()'),
                       self, SLOT('buildPlot()'))
+        self.connect(self.btnPreview, SIGNAL('clicked()'),
+                      self, SLOT('previewEquation()'))
 
         mode_id = self.cmbSysCoord.findText(self.mode)
         if mode_id > 0:
             self.cmbSysCoord.setCurrentIndex(mode_id)
             self.cmbSysCoord.emit(SIGNAL('currentIndexChanged(const QString)'), self.mode)
 
-        self.spin_n.setValue(self.n)
-        self.spin_n.emit(SIGNAL('valueChanged(int)'), self.n)
+        self.spin_n.setValue(self.equations.n_val)
+        self.spin_n.emit(SIGNAL('valueChanged(int)'), self.equations.n_val)
+        self.setEquation('Angular part')
 
     @QtCore.pyqtSlot('int')
     def set_n(self, new_value):
-        self.n = new_value
-        if new_value <= self.l:
+        self.equations.n_val = new_value
+        if new_value <= self.equations.l:
             self.l = new_value - 1
         self.spin_l.setMaximum(new_value - 1)
-        self.spin_m.setMaximum(self.l)
-        self.spin_m.setMinimum(-self.l)
+        self.spin_m.setMaximum(self.equations.l)
+        self.spin_m.setMinimum(-self.equations.l)
 
     @QtCore.pyqtSlot('int')
     def set_l(self, new_value):
-        self.l = new_value
-        self.spin_m.setMaximum(self.l)
-        self.spin_m.setMinimum(-self.l)
+        self.equations.l = new_value
+        self.spin_m.setMaximum(self.equations.l)
+        self.spin_m.setMinimum(-self.equations.l)
 
     @QtCore.pyqtSlot('int')
     def set_m(self, new_value):
-        self.m = new_value
+        self.equations.m_val = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMinimum_x_r(self, new_value):
@@ -155,10 +158,9 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.plot.clear()
         else:
             self.plot = sympy.Plot()
-        equation = equations.Angular_Part(self.l, self.m, equations.theta, equations.phi)
+        equation = self.equation(self.equations.l, self.equations.m_val, equations.theta, equations.phi)
         if self.mode == 'cartesian':
-            self.plot[1] = (equations.Angular_Part(self.l, self.m, equations.theta, equations.phi),
-                            'mode=cartesian')
+            pass
         elif self.mode == 'spherical':
             self.plot[1] = (sympy.trigsimp(equation.subs(sympy.sin(equations.theta),sympy.sin(equations.theta)**2)),
                             [equations.phi, self.min_phi, self.max_phi, 35], [equations.theta, self.min_theta, self.max_theta, 35],
@@ -166,6 +168,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
         self.plot.show()
         return True
+
+    @QtCore.pyqtSlot()
+    def previewEquation(self):
+        sympy.preview(self.equation())
 
     @QtCore.pyqtSlot('QString')
     def toggleMode(self, mode):
@@ -230,6 +236,13 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.spinMax_y_theta.setValue(self.max_theta)
             self.spinMax_z_phi.setValue(self.max_phi)
             
+    @QtCore.pyqtSlot('QString')
+    def setEquation(self, equation):
+        if equation == 'Angular part':
+            #self.toggleMode('spherical')
+            self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
+            self.equation = self.equations.Angular_Part
+
     def closeEvent(self, event):
         #if self.maybeSave():
         #    event.accept()

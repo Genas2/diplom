@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>214</width>
-    <height>332</height>
+    <width>287</width>
+    <height>357</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <layout class="QVBoxLayout" name="verticalLayout_13">
+   <layout class="QVBoxLayout" name="verticalLayout_14">
     <item>
      <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
@@ -345,20 +345,40 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <layout class="QVBoxLayout" name="verticalLayout_13">
       <item>
-       <widget class="QPushButton" name="btnBuildPlot">
-        <property name="text">
-         <string>Build Plot</string>
-        </property>
+       <widget class="QComboBox" name="cmbEquations">
+        <item>
+         <property name="text">
+          <string>Angular part</string>
+         </property>
+        </item>
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="btnExit">
-        <property name="text">
-         <string>Exit</string>
-        </property>
-       </widget>
+       <layout class="QHBoxLayout" name="horizontalLayout_3">
+        <item>
+         <widget class="QPushButton" name="btnBuildPlot">
+          <property name="text">
+           <string>Build Plot</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnPreview">
+          <property name="text">
+           <string>Preview equation</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QPushButton" name="btnExit">
+          <property name="text">
+           <string>Exit</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </item>
      </layout>
     </item>
@@ -369,7 +389,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>214</width>
+     <width>287</width>
      <height>22</height>
     </rect>
    </property>
