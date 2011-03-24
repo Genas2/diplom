@@ -15,11 +15,16 @@ class Equations:
     Z = Symbol('Z')
     a0 = Symbol('a0')
     
+    types = {}
+
     def __init__(self):
         # Setting initial quantum numbers values
         self.n_val = 1
         self.l_val = 0
         self.m_val = 0
+
+        self.types['Angular part'] = self.Angular_Part
+        self.types['Phi equation'] = self.Phi_Equation
 
     def select_exec_mode(self, x=x):
         t = type(x).__name__

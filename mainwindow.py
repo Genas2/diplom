@@ -55,7 +55,6 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     lower_phi_limit = -2 * sympy.pi
     upper_phi_limit = 2 * sympy.pi
 
-    # 
     plot = ''
 
     def __init__(self, parent = None):
@@ -104,6 +103,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if mode_id > 0:
             self.cmbSysCoord.setCurrentIndex(mode_id)
             self.cmbSysCoord.emit(SIGNAL('currentIndexChanged(const QString)'), self.mode)
+
+        for key in self.equations.types:
+            if self.cmbEquations.findText(key):
+                self.cmbEquations.addItem(key)
 
         self.spin_n.setValue(self.equations.n_val)
         self.spin_n.emit(SIGNAL('valueChanged(int)'), self.equations.n_val)
@@ -238,9 +241,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             
     @QtCore.pyqtSlot('QString')
     def setEquation(self, equation):
-        if equation == 'Angular part':
-            self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
-            self.equation = self.equations.Angular_Part
+        if equation in self.equations.types:
+            self.equation = self.equations.types[equation]
+            #self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
+            #self.equation = self.equations.Angular_Part
 
     def closeEvent(self, event):
         #if self.maybeSave():
