@@ -112,17 +112,17 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot('int')
     def set_n(self, new_value):
         self.equations.n_val = new_value
-        if new_value <= self.equations.l:
-            self.l = new_value - 1
+        if new_value <= self.equations.l_val:
+            self.equations.l_val = new_value - 1
         self.spin_l.setMaximum(new_value - 1)
-        self.spin_m.setMaximum(self.equations.l)
-        self.spin_m.setMinimum(-self.equations.l)
+        self.spin_m.setMaximum(self.equations.l_val)
+        self.spin_m.setMinimum(-self.equations.l_val)
 
     @QtCore.pyqtSlot('int')
     def set_l(self, new_value):
-        self.equations.l = new_value
-        self.spin_m.setMaximum(self.equations.l)
-        self.spin_m.setMinimum(-self.equations.l)
+        self.equations.l_val = new_value
+        self.spin_m.setMaximum(self.equations.l_val)
+        self.spin_m.setMinimum(-self.equations.l_val)
 
     @QtCore.pyqtSlot('int')
     def set_m(self, new_value):
@@ -158,12 +158,12 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.plot.clear()
         else:
             self.plot = sympy.Plot()
-        equation = self.equation(self.equations.l, self.equations.m_val, equations.theta, equations.phi)
+        #equation = self.equation(self.equations.l_val, self.equations.m_val)
         if self.mode == 'cartesian':
             pass
         elif self.mode == 'spherical':
-            self.plot[1] = (sympy.trigsimp(equation.subs(sympy.sin(equations.theta),sympy.sin(equations.theta)**2)),
-                            [equations.phi, self.min_phi, self.max_phi, 35], [equations.theta, self.min_theta, self.max_theta, 35],
+            self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
+                            [self.equations.phi, self.min_phi, self.max_phi, 35], [self.equations.theta, self.min_theta, self.max_theta, 35],
                             'mode=spherical')
 
         self.plot.show()
@@ -239,7 +239,6 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot('QString')
     def setEquation(self, equation):
         if equation == 'Angular part':
-            #self.toggleMode('spherical')
             self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
             self.equation = self.equations.Angular_Part
 
