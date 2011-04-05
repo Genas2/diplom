@@ -196,6 +196,24 @@ class Equations:
     #
     
     
+# MOLECULAR ION
+
+# Draft
+#S = exp(-R) * (1+ R + R**2/3)
+#J = exp(-2*R) * (1 + 1/R)
+#K = exp(-R) * (1/R - 2 * R/3)
+
+#Epl = Rational(-1,2) + (J+K)/(1+S)
+
+#Rgl = 2.4
+#x,y = symbols('xy')
+#psiP = exp(-sqrt(x**2 + y**2)/2) + exp(-sqrt((x-Rgl)**2 + y**2)/2)
+#psiM = exp(-sqrt(x**2 + y**2)/2) - exp(-sqrt((x-Rgl)**2 + y**2)/2)
+#Plot(psiP, [x,-4,6], [y,-4,4])
+#Plot(psiP**2, [x,-4,6], [y,-4,4])
+#Plot(psiM, [x,-4,6], [y,-4,4])
+#Plot(psiM**2, [x,-4,6], [y,-4,4])
+
     ########################################################################################################################################
     # Temp
     #R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, t)$
