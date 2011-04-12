@@ -57,7 +57,7 @@ class Equations:
         elif mode == 'undef':
             return False
     
-        left_part  = 1.0/sympy.sqrt(2.0 * sympy.pi)
+        left_part  = 1/sympy.sqrt(2 * sympy.pi)
         right_part = sympy.cos(sympy.abs(m) * self.phi) if m>=0 else sympy.sin(sympy.abs(m) * self.phi)
     
         if mode == 'numer':
@@ -152,23 +152,6 @@ class Equations:
     
         return THETA * PHI
     
-    
-    #/*
-    # Angular part plot
-    #*/
-    #/*
-    #plot3d(Y(0,0,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))])$
-    #
-    #Plot(sqrt(6)/(2*sqrt(4*pi)) * cos(phi) * sin(theta)**2, [phi,0,2*pi,35], [theta,-pi,pi,35], 'mode=spherical; color=zfade4')
-    #Plot((1/(4*sqrt(2*pi))) * exp(-Z * sqrt(x**2)) * x * (Z/0.5)**(3.0/2.0) * , [x,-2,2])
-    
-    
-    ## Generalized
-    #plot3d(Y(2,1,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))], [grid, 50, 50], [plot_format, gnuplot])$
-    #*/
-    
-    
-    
     #/*
     # Laguerre polynomials
     #*/
@@ -187,7 +170,14 @@ class Equations:
     # Radial part
     #*/
     #R(n,l,r) := -(((2 * Z)/(n * a0))^3 * (n - l - 1)!/(2 * n * ((n+l)!)^3)) ^ (1/2) * exp(-(Z * r)/(a0 * n)) * at(aL(n+l, 2*l+1, t), t=(2*Z*r)/(a0*n))$
-    def Radial_Part(n=1, l=0, r=Symbol('r')):
+    def Radial_Part(self, n='undef', l='undef', r=Symbol('r')):
+        ''' Executes radial part of Shregenger equation '''
+
+        if l == 'undef':
+            l = self.l_val
+        if n == 'undef':
+            n = self.n_val
+
         laguerre_part = Generalized_Laguerre(n + l, 2*l + 1, r).subs(r, (2.0*Z*r)/(a0*n))
         left_part = -(((2.0 * Z)/(n * a0))**3 * Rational(factorial(n - l -1), 2*n * factorial(n+l)**3))**Rational(1,2) 
         exp_part = sympy.exp(-(Z * r)/(a0 * n))
@@ -199,8 +189,22 @@ class Equations:
     #*/
     #PSI(n,l,m,r,theta,phi) := R(n, l, r) * Y(l, m, theta, phi)$
     #
+    def Wave_Function(self, n='undef', l='undef', m='undef', r=Symbol('r'), theta=Symbol('theta'), phi=Symbol('phi')):
+        ''' Executes wave function for Hydrogen atom '''
+        
+        if n == 'undef':
+            n = self.n_val
+        if l == 'undef':
+            l = self.l_val
+        if m == 'undef':
+            m = self.m_val
+
+        rad_part = self.Radial_Part()
+        ang_part = self.Angular_Part()
+
+        return rad_part * ang_part
     
-    
+#######################################################################################################################################
 # MOLECULAR ION
 
 # Draft
@@ -219,8 +223,22 @@ class Equations:
 #Plot(psiM, [x,-4,6], [y,-4,4])
 #Plot(psiM**2, [x,-4,6], [y,-4,4])
 
-    ########################################################################################################################################
-    # Temp
-    #R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, t)$
-    #kill(t)$ Rez:R(2,0,r)$ t:(2*Z*r)/(a0*n)$ ratsimp(ev(Rez));
-    #
+#######################################################################################################################################
+# Temp
+#R(n,l,r) := -(((2 * Z) / (n * a0))^3 * (factorial((n - l - 1)) / (2 * n * (factorial(n + l))^3)))^(1/2) * exp(-(Z * r)/(a0 * n)) * aL(n+l, 2*l+1, t)$
+#kill(t)$ Rez:R(2,0,r)$ t:(2*Z*r)/(a0*n)$ ratsimp(ev(Rez));
+#/*
+# Angular part plot
+#*/
+#/*
+#plot3d(Y(0,0,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))])$
+#
+#Plot(sqrt(6)/(2*sqrt(4*pi)) * cos(phi) * sin(theta)**2, [phi,0,2*pi,35], [theta,-pi,pi,35], 'mode=spherical; color=zfade4')
+#Plot((1/(4*sqrt(2*pi))) * exp(-Z * sqrt(x**2)) * x * (Z/0.5)**(3.0/2.0) * , [x,-2,2])
+
+    
+## Generalized
+#plot3d(Y(2,1,theta,phi), [theta,0,2*%pi], [phi,0,2*%pi], [transform_xy, make_transform([theta,phi,r],r*sin(phi)*sin(theta), r*cos(phi)*sin(theta),r*cos(theta))], [grid, 50, 50], [plot_format, gnuplot])$
+#*/
+    
+#
