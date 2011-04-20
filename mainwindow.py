@@ -174,7 +174,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     @QtCore.pyqtSlot()
     def previewEquation(self):
-        sympy.preview(self.equation())
+        print(self.equation)
+        #sympy.preview(self.equation())
 
     @QtCore.pyqtSlot('QString')
     def toggleMode(self, mode):
@@ -242,6 +243,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot('QString')
     def setEquation(self, equation):
         if equation in self.equations.types:
+            print(equation)
             self.equation = self.equations.types[equation]
             #self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
             #self.equation = self.equations.Angular_Part

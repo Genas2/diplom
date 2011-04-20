@@ -6,10 +6,13 @@ from sympy import Symbol, factorial, Rational
 class Equations:
     # Declaring variables
     x = Symbol('x')
+    y = Symbol('y')
+    z = Symbol('z')
     n = Symbol('n')
     l = Symbol('l')
     m = Symbol('m')
     r = Symbol('r')
+    R = Symbol('R')
     phi = Symbol('phi')
     theta = Symbol('theta')
     Z = Symbol('Z')
@@ -23,8 +26,11 @@ class Equations:
         self.l_val = 0
         self.m_val = 0
 
+        #List of available equations
         self.types['Angular part'] = self.Angular_Part
         self.types['Phi equation'] = self.Phi_Equation
+        self.types['Ion wavefunction positive'] = self.Wave_Function_Ion_Positive
+        self.types['Ion wavefunction negative'] = self.Wave_Function_Ion_Negative
 
     def select_exec_mode(self, x=x):
         t = type(x).__name__
@@ -140,7 +146,7 @@ class Equations:
     #
     
     def Angular_Part(self, l='undef', m='undef', theta=theta, phi=phi):
-        ''' Executes Angular part of Shregenger equation in spherical coordinates '''
+        ''' Generates Angular part of Shregenger equation in spherical coordinates '''
     
         if l == 'undef':
             l = self.l_val
@@ -156,31 +162,31 @@ class Equations:
     # Laguerre polynomials
     #*/
     #L(n,r) := exp(r) * diff(r^n * exp(-r), r, n)$
-    def Laguerre(n=1, r=Symbol('r')):
+    def Laguerre(self, n=1, r=Symbol('r')):
         return sympy.radsimp(sympy.exp(r) * sympy.diff(r**n * sympy.exp(-r), r, n))
     
     #/*
     # generalized Legendre polinomials
     #*/
     #aL(n,k,r) := diff(L(n, r), r, k)$
-    def Generalized_Laguerre(n=1, k=0, r=Symbol('r')):
-        return sympy.diff(Laguerre(n, r), r, k)
+    def Generalized_Laguerre(self, n=1, k=0, r=Symbol('r')):
+        return sympy.diff(self.Laguerre(n, r), r, k)
     
     #/*
     # Radial part
     #*/
     #R(n,l,r) := -(((2 * Z)/(n * a0))^3 * (n - l - 1)!/(2 * n * ((n+l)!)^3)) ^ (1/2) * exp(-(Z * r)/(a0 * n)) * at(aL(n+l, 2*l+1, t), t=(2*Z*r)/(a0*n))$
     def Radial_Part(self, n='undef', l='undef', r=Symbol('r')):
-        ''' Executes radial part of Shregenger equation '''
+        ''' Generates radial part of Shregenger equation '''
 
         if l == 'undef':
             l = self.l_val
         if n == 'undef':
             n = self.n_val
 
-        laguerre_part = Generalized_Laguerre(n + l, 2*l + 1, r).subs(r, (2.0*Z*r)/(a0*n))
-        left_part = -(((2.0 * Z)/(n * a0))**3 * Rational(factorial(n - l -1), 2*n * factorial(n+l)**3))**Rational(1,2) 
-        exp_part = sympy.exp(-(Z * r)/(a0 * n))
+        laguerre_part = self.Generalized_Laguerre(n + l, 2*l + 1, r).subs(r, (2.0 * self.Z * r)/(self.a0 * n))
+        left_part = -(((2.0 * self.Z)/(n * self.a0))**3 * Rational(factorial(n - l -1), 2*n * factorial(n+l)**3))**Rational(1,2) 
+        exp_part = sympy.exp(-(self.Z * r)/(self.a0 * n)) * ((2 * r)/ (n * self.a0)) ** l
     
         return left_part * exp_part * laguerre_part
     
@@ -190,7 +196,7 @@ class Equations:
     #PSI(n,l,m,r,theta,phi) := R(n, l, r) * Y(l, m, theta, phi)$
     #
     def Wave_Function(self, n='undef', l='undef', m='undef', r=Symbol('r'), theta=Symbol('theta'), phi=Symbol('phi')):
-        ''' Executes wave function for Hydrogen atom '''
+        ''' Generates wave function for Hydrogen atom '''
         
         if n == 'undef':
             n = self.n_val
@@ -199,8 +205,8 @@ class Equations:
         if m == 'undef':
             m = self.m_val
 
-        rad_part = self.Radial_Part()
-        ang_part = self.Angular_Part()
+        rad_part = self.Radial_Part(n=n, l=l)
+        ang_part = self.Angular_Part(l=l, m=m)
 
         return rad_part * ang_part
     
@@ -214,14 +220,21 @@ class Equations:
 
 #Epl = Rational(-1,2) + (J+K)/(1+S)
 
-#Rgl = 2.4
-#x,y = symbols('xy')
-#psiP = exp(-sqrt(x**2 + y**2)/2) + exp(-sqrt((x-Rgl)**2 + y**2)/2)
-#psiM = exp(-sqrt(x**2 + y**2)/2) - exp(-sqrt((x-Rgl)**2 + y**2)/2)
-#Plot(psiP, [x,-4,6], [y,-4,4])
-#Plot(psiP**2, [x,-4,6], [y,-4,4])
-#Plot(psiM, [x,-4,6], [y,-4,4])
-#Plot(psiM**2, [x,-4,6], [y,-4,4])
+    def Wave_Function_Ion_Positive(self, R='undef'):
+        if R == 'undef':
+            R = 0.4
+        return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) + sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
+
+    def Wave_Function_Ion_Negative(self, R='undef'):
+        if R == 'undef':
+            R = 0.4
+        return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) - sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
+
+        #x,y = symbols('xy')
+        #Plot(psiP, [x,-4,6], [y,-4,4])
+        #Plot(psiP**2, [x,-4,6], [y,-4,4])
+        #Plot(psiM, [x,-4,6], [y,-4,4])
+        #Plot(psiM**2, [x,-4,6], [y,-4,4])
 
 #######################################################################################################################################
 # Temp
