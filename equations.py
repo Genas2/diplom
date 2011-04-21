@@ -15,10 +15,13 @@ class Equations:
     R = Symbol('R')
     phi = Symbol('phi')
     theta = Symbol('theta')
-    Z = Symbol('Z')
-    a0 = Symbol('a0')
+    #Z = Symbol('Z')
+    #a0 = Symbol('a0')
+    Z = 1
+    a0 = 0.52917706 * 10**(-10)
     
     types = {}
+    __equations__ = []
 
     def __init__(self):
         # Setting initial quantum numbers values
@@ -31,6 +34,12 @@ class Equations:
         self.types['Phi equation'] = self.Phi_Equation
         self.types['Ion wavefunction positive'] = self.Wave_Function_Ion_Positive
         self.types['Ion wavefunction negative'] = self.Wave_Function_Ion_Negative
+
+        self.__equations__.append(('Angular part', self.Angular_Part, 'spherical'))
+        self.__equations__.append(('Phi Equation', self.Phi_Equation, 'spherical'))
+        self.__equations__.append(('Radial part', self.Radial_Part, 'spherical'))
+        self.__equations__.append(('Ion wavefunction positive', self.Wave_Function_Ion_Positive, 'cartesian'))
+        self.__equations__.append(('Ion wavefunction negative', self.Wave_Function_Ion_Negative, 'cartesian'))
 
     def select_exec_mode(self, x=x):
         t = type(x).__name__

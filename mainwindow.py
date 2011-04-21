@@ -104,9 +104,10 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.cmbSysCoord.setCurrentIndex(mode_id)
             self.cmbSysCoord.emit(SIGNAL('currentIndexChanged(const QString)'), self.mode)
 
-        for key in self.equations.types:
-            if self.cmbEquations.findText(key):
-                self.cmbEquations.addItem(key)
+        for line in self.equations.__equations__:
+            label, equation, mode = line
+            if self.cmbEquations.findText(label):
+                self.cmbEquations.addItem(label)
 
         self.spin_n.setValue(self.equations.n_val)
         self.spin_n.emit(SIGNAL('valueChanged(int)'), self.equations.n_val)
@@ -163,7 +164,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.plot = sympy.Plot()
         #equation = self.equation(self.equations.l_val, self.equations.m_val)
         if self.mode == 'cartesian':
-            pass
+            self.plot[1] = (self.equation(), [self.equations.x, self.min_x, self.max_x], [self.equations.y, self.min_y, self.max_y])
         elif self.mode == 'spherical':
             self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
                             [self.equations.phi, self.min_phi, self.max_phi, 35], [self.equations.theta, self.min_theta, self.max_theta, 35],
@@ -174,8 +175,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
 
     @QtCore.pyqtSlot()
     def previewEquation(self):
-        print(self.equation)
-        #sympy.preview(self.equation())
+        sympy.preview(self.equation())
 
     @QtCore.pyqtSlot('QString')
     def toggleMode(self, mode):
@@ -242,10 +242,12 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             
     @QtCore.pyqtSlot('QString')
     def setEquation(self, equation):
-        if equation in self.equations.types:
-            print(equation)
-            self.equation = self.equations.types[equation]
-            #self.cmbSysCoord.setCurrentIndex(self.cmbSysCoord.findText('spherical'))
+        for line in self.equations.__equations__:
+            label, eq, mode = line
+            if label == equation:
+                mode_id = self.cmbSysCoord.findText(mode)
+                self.cmbSysCoord.setCurrentIndex(mode_id)
+                self.equation = eq
             #self.equation = self.equations.Angular_Part
 
     def closeEvent(self, event):
