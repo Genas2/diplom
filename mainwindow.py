@@ -147,6 +147,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot('double')
     def changedMaximum_x_r(self, new_value):
         self.spinMin_x_r.setMaximum(new_value)
+        self.max_r = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMaximum_y_theta(self, new_value):
@@ -166,8 +167,14 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
         if self.mode == 'cartesian':
             self.plot[1] = (self.equation(), [self.equations.x, self.min_x, self.max_x], [self.equations.y, self.min_y, self.max_y])
         elif self.mode == 'spherical':
-            self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
-                            [self.equations.phi, self.min_phi, self.max_phi, 35], [self.equations.theta, self.min_theta, self.max_theta, 35],
+            if self.equation.__name__ == 'Radial_Part':
+                self.plot.axes._label_axes = True
+                print(self.max_r)
+                self.plot[1] = (self.equation(), [self.equations.r, self.min_r, self.max_r])
+            else:
+                self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
+                            [self.equations.phi, self.min_phi, self.max_phi, 35], 
+                            [self.equations.theta, self.min_theta, self.max_theta, 35],
                             'mode=spherical')
 
         self.plot.show()

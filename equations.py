@@ -18,7 +18,7 @@ class Equations:
     #Z = Symbol('Z')
     #a0 = Symbol('a0')
     Z = 1
-    a0 = 0.52917706 * 10**(-10)
+    a0 = 0.52917706
     
     types = {}
     __equations__ = []
@@ -192,6 +192,8 @@ class Equations:
             l = self.l_val
         if n == 'undef':
             n = self.n_val
+
+        #self.a0 = Symbol('a0')
 
         laguerre_part = self.Generalized_Laguerre(n + l, 2*l + 1, r).subs(r, (2.0 * self.Z * r)/(self.a0 * n))
         left_part = -(((2.0 * self.Z)/(n * self.a0))**3 * Rational(factorial(n - l -1), 2*n * factorial(n+l)**3))**Rational(1,2) 
