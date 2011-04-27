@@ -27,14 +27,19 @@ wf = wf.subs(e.a0, sympy.Rational(1,2))
 wf = wf.subs(e.y, 1)
 
 #sympy.preview(wf)
-rp = e.Radial_Part(n=2, l=0)
 #sympy.preview(rp)
 p = sympy.Plot()
 p.axes._label_axes = True
-p.axes._stride[0] = 1
-p[1] = (rp, [e.r,0,10,35])
-rp1 = e.Radial_Part(n=2, l=1)
-p[2] = (rp1, [e.r,0,10,35])
+p.axes._label_ticks = True
+p.axes._stride = [1,0.5,0]
+
+rp = e.Radial_Part(n=2, l=1)
+p[1] = (e.r**2 * rp**2, [e.r,0,5,100])
+#rp1 = e.Radial_Part(n=2, l=1)
+#p[2] = (e.r**2 * rp1**2, [e.r,0,5,100])
+#rp2 = e.Radial_Part(n=3, l=2)
+#p[3] = (e.r**2 * rp2**2, [e.r,0,5,100])
+
 #sympy.pretty_print(wf)
 
 #sympy.Plot(wf)
