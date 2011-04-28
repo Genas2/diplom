@@ -233,14 +233,18 @@ class Equations:
 
     def Wave_Function_Ion_Positive(self, R='undef'):
         if R == 'undef':
-            R = 0.4
+            R = 2.4
         return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) + sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
 
     def Wave_Function_Ion_Negative(self, R='undef'):
         if R == 'undef':
-            R = 0.4
+            R = 2.4
         return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) - sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
 
+        #Rgl = 2.4
+        #x,y = symbols('xy')
+        #psiP = exp(-sqrt(x**2 + y**2)/2) + exp(-sqrt((x-Rgl)**2 + y**2)/2)
+        #psiM = exp(-sqrt(x**2 + y**2)/2) - exp(-sqrt((x-Rgl)**2 + y**2)/2)
         #x,y = symbols('xy')
         #Plot(psiP, [x,-4,6], [y,-4,4])
         #Plot(psiP**2, [x,-4,6], [y,-4,4])

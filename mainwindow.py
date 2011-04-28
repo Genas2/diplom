@@ -135,27 +135,50 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     @QtCore.pyqtSlot('double')
     def changedMinimum_x_r(self, new_value):
         self.spinMax_x_r.setMinimum(new_value)
+        if self.mode == 'cartesian':
+            self.min_x = new_value
+        elif self.mode == 'spherical':
+            self.min_r = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMinimum_y_theta(self, new_value):
         self.spinMax_y_theta.setMinimum(new_value)
+        if self.mode == 'cartesian':
+            self.min_y = new_value
+        elif self.mode == 'spherical':
+            self.min_theta = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMinimum_z_phi(self, new_value):
         self.spinMax_z_phi.setMinimum(new_value)
+        if self.mode == 'cartesian':
+            self.min_z = new_value
+        elif self.mode == 'spherical':
+            self.min_phi = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMaximum_x_r(self, new_value):
         self.spinMin_x_r.setMaximum(new_value)
-        self.max_r = new_value
+        if self.mode == 'cartesian':
+            self.max_x = new_value
+        elif self.mode == 'spherical':
+            self.max_r = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMaximum_y_theta(self, new_value):
         self.spinMin_y_theta.setMaximum(new_value)
+        if self.mode == 'cartesian':
+            self.max_y = new_value
+        elif self.mode == 'spherical':
+            self.max_theta = new_value
 
     @QtCore.pyqtSlot('double')
     def changedMaximum_z_phi(self, new_value):
         self.spinMin_z_phi.setMaximum(new_value)
+        if self.mode == 'cartesian':
+            self.max_z = new_value
+        elif self.mode == 'spherical':
+            self.max_phi = new_value
 
     @QtCore.pyqtSlot()
     def buildPlot(self):
