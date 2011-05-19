@@ -16,11 +16,11 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
     equations = Equations()
 
     # Cartesian values limits
-    min_x = -1
-    max_x = 1
+    min_x = -4
+    max_x = 4
 
-    min_y = -1
-    max_y = 1
+    min_y = -4
+    max_y = 4
 
     min_z = -1
     max_z = 1
@@ -188,7 +188,7 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
             self.plot = sympy.Plot()
         #equation = self.equation(self.equations.l_val, self.equations.m_val)
         if self.mode == 'cartesian':
-            self.plot[1] = (self.equation(), [self.equations.x, self.min_x, self.max_x], [self.equations.y, self.min_y, self.max_y])
+            self.plot[1] = (self.equation(), [self.equations.x, self.min_x, self.max_x,30], [self.equations.y, self.min_y, self.max_y,30])
         elif self.mode == 'spherical':
             if self.equation.__name__ == 'Radial_Part':
                 self.plot.axes._label_axes = True
@@ -196,8 +196,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 self.plot[1] = (self.equation(), [self.equations.r, self.min_r, self.max_r])
             else:
                 self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
-                            [self.equations.phi, self.min_phi, self.max_phi, 35], 
-                            [self.equations.theta, self.min_theta, self.max_theta, 35],
+                            [self.equations.phi, self.min_phi, self.max_phi, 150], 
+                            [self.equations.theta, self.min_theta, self.max_theta, 150],
                             'mode=spherical')
 
         self.plot.show()

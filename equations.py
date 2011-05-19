@@ -19,6 +19,7 @@ class Equations:
     #a0 = Symbol('a0')
     Z = 1
     a0 = 0.52917706
+    R = 2.4
     
     types = {}
     __equations__ = []
@@ -40,6 +41,8 @@ class Equations:
         self.__equations__.append(('Radial part', self.Radial_Part, 'spherical'))
         self.__equations__.append(('Ion wavefunction positive', self.Wave_Function_Ion_Positive, 'cartesian'))
         self.__equations__.append(('Ion wavefunction negative', self.Wave_Function_Ion_Negative, 'cartesian'))
+        self.__equations__.append(('Square ion wavefunction positive', self.Square_Wave_Function_Ion_Positive, 'cartesian'))
+        self.__equations__.append(('Square ion wavefunction negative', self.Square_Wave_Function_Ion_Negative, 'cartesian'))
 
     def select_exec_mode(self, x=x):
         t = type(x).__name__
@@ -233,13 +236,23 @@ class Equations:
 
     def Wave_Function_Ion_Positive(self, R='undef'):
         if R == 'undef':
-            R = 2.4
+            R = self.R 
         return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) + sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
 
     def Wave_Function_Ion_Negative(self, R='undef'):
         if R == 'undef':
-            R = 2.4
+            R = self.R 
         return sympy.exp(-sympy.sqrt(self.x**2 + self.y**2)/2) - sympy.exp(-sympy.sqrt((self.x-R)**2 + self.y**2)/2)
+
+    def Square_Wave_Function_Ion_Positive(self, R='undef'):
+        if R == 'undef':
+            R = self.R 
+        return sympy.abs(self.Wave_Function_Ion_Positive(R))**2
+
+    def Square_Wave_Function_Ion_Negative(self, R='undef'):
+        if R == 'undef':
+            R = self.R 
+        return sympy.abs(self.Wave_Function_Ion_Negative(R))**2
 
         #Rgl = 2.4
         #x,y = symbols('xy')
