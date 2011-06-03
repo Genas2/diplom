@@ -196,8 +196,8 @@ class MainWindow(QtGui.QMainWindow, Ui_MainWindow):
                 self.plot[1] = (self.equation(), [self.equations.r, self.min_r, self.max_r])
             else:
                 self.plot[1] = (sympy.trigsimp(self.equation().subs(sympy.sin(self.equations.theta),sympy.sin(self.equations.theta)**2)),
-                            [self.equations.phi, self.min_phi, self.max_phi, 150], 
-                            [self.equations.theta, self.min_theta, self.max_theta, 150],
+                            [self.equations.phi, self.min_phi, self.max_phi, 500], 
+                            [self.equations.theta, self.min_theta, self.max_theta, 500],
                             'mode=spherical')
 
         self.plot.show()
